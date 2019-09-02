@@ -1,0 +1,16 @@
+{
+  "name": "up360-photos-slicer-service",
+  "version": "0.1.0",
+  "description": "Service which provides chunks of images for up-360 library.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "lodash": "^4.17.15",
+    "sharp": "^0.23.0"
+  }
+}
