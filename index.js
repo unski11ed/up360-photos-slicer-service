@@ -45,11 +45,11 @@ app.get('/:photo/:fileNameWExt', (req, res) => {
             .send('File not found')
             .end();
     });
-    console.log(photoFilePath);
+
     if (inputImageStream) {
         // Create transformation func
-        const left = Math.round(column / totalColumns * resX);
-        const top = Math.round(row / totalRows * resY);
+        const left = Math.floor(column / totalColumns * resX);
+        const top = Math.floor(row / totalRows * resY);
         const width = Math.round(1 / totalColumns * resX);
         const height = Math.round(1 / totalRows * resY);
 
