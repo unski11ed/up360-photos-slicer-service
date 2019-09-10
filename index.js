@@ -4,7 +4,6 @@ const path = require('path');
 const stream = require('stream');
 const mkdirp = require('mkdirp');
 const { map } = require('lodash');
-const util = require('util');
 const fs = require('fs');
 
 const PORT = process.env['PORT'] || 8000;
@@ -15,7 +14,6 @@ const CACHE_PATH = process.env['CACHE_PATH']
     || path.resolve(__dirname, 'cache');
 
 const app = new express();
-const pipeline = util.promisify(stream.pipeline);
 
 app.get('/:photo/:fileNameWExt', async (req, res, next) => {
     const { photo, fileNameWExt } = req.params;
@@ -70,8 +68,8 @@ app.get('/:photo/:fileNameWExt', async (req, res, next) => {
     const width = Math.round(1 / totalColumns * resX);
     const height = Math.round(1 / totalRows * resY);
 
+    // Transform the image and store it in a buffer
     let transformedImageBuffer;
-    
     try {
         transformedImageBuffer = await sharp(photoFilePath)
             .resize(resX, resY)
@@ -82,6 +80,7 @@ app.get('/:photo/:fileNameWExt', async (req, res, next) => {
         next(exc);
     }
 
+    // Create a stream from the buffer
     const transformedImageStream = new stream.PassThrough();
     transformedImageStream.end(transformedImageBuffer);
 
@@ -93,7 +92,7 @@ app.get('/:photo/:fileNameWExt', async (req, res, next) => {
         transformedImageStream.pipe(cacheWriteStream);
     }
 
-    // Transform and pass to response
+    // Pipe the transformed stream to response
     transformedImageStream.pipe(res);
 });
 
